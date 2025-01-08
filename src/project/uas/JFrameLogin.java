@@ -28,6 +28,7 @@ public class JFrameLogin extends javax.swing.JFrame {
      */
     public JFrameLogin() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -49,8 +50,11 @@ public class JFrameLogin extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("LOGIN PAGE");
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setResizable(false);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        jPanel1.setAutoscrolls(true);
 
         loginLabel.setFont(new java.awt.Font("Engravers MT", 1, 24)); // NOI18N
         loginLabel.setText("LOGIN APLIKASI TATA USAHA");
@@ -109,7 +113,7 @@ public class JFrameLogin extends javax.swing.JFrame {
                 .addComponent(passTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -166,11 +170,15 @@ public class JFrameLogin extends javax.swing.JFrame {
                                 } else {
                                    Session.setNip(rs.getString("nip"));
                                    Session.setNama(rs.getString("nama"));
+                                   if(rs.getString("jenis_kelamin").equals("L")) {
+                                       Session.setJenis_kelamin("Bapak");
+                                   } else {
+                                       Session.setJenis_kelamin("Ibu");
+                                   }
                                    JOptionPane.showMessageDialog(null, "Login Berhasil");
                                    new JFrameHome().setVisible(true);
                                    this.dispose();
                                 }
-                                System.out.println("Nama Pegawai: " + rs.getString("nama_pegawai"));
                             }
                         }
                     }

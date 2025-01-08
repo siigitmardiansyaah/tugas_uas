@@ -5,19 +5,39 @@
 package project.uas;
 
 import Utility.Session;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JLabel;
+import javax.swing.Timer;
 
 /**
  *
  * @author sigit
  */
 public class JFrameHome extends javax.swing.JFrame {
-String nama = Session.getNama();
+
+    String nama = Session.getNama();
+    String nip = Session.getNip();
+    String js = Session.getJenis_kelamin();
+
     /**
      * Creates new form JFrameHome
      */
     public JFrameHome() {
         initComponents();
-        namaLabel.setText("Halo, " + nama);
+        identitasLabel.setText(js.toUpperCase() + " " + nama.toUpperCase() + " (" + nip + ")");
+        Timer timer = new Timer(1000, e -> updateDateTime());
+        timer.start();
+        setLocationRelativeTo(null);
+    }
+
+    private void updateDateTime() {
+        // Format tanggal dan waktu
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        String currentTime = formatter.format(new Date());
+        tglLabel.setText(currentTime);
     }
 
     /**
@@ -29,31 +49,146 @@ String nama = Session.getNama();
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        namaLabel = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        identitasLabel = new javax.swing.JLabel();
+        tglLabel = new javax.swing.JLabel();
+        pegawaiBTN = new javax.swing.JButton();
+        logoutBTN = new javax.swing.JButton();
+        siswaBTN = new javax.swing.JButton();
+        bayarBTN = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Home Page");
+        setResizable(false);
 
-        namaLabel.setText("jLabel1");
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel1.setText("SELAMAT DATANG, ");
+
+        identitasLabel.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        identitasLabel.setText("Identitas Login");
+
+        tglLabel.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        tglLabel.setText("Tanggal");
+
+        pegawaiBTN.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        pegawaiBTN.setText("PEGAWAI");
+        pegawaiBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pegawaiBTNActionPerformed(evt);
+            }
+        });
+
+        logoutBTN.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        logoutBTN.setText("LOGOUT");
+        logoutBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logoutBTNActionPerformed(evt);
+            }
+        });
+
+        siswaBTN.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        siswaBTN.setText("SISWA");
+        siswaBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                siswaBTNActionPerformed(evt);
+            }
+        });
+
+        bayarBTN.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        bayarBTN.setText("BAYAR SPP");
+        bayarBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bayarBTNActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(identitasLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(89, 89, 89)
+                        .addComponent(tglLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(pegawaiBTN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(siswaBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(89, 89, 89)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(bayarBTN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(logoutBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(66, 66, 66))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(tglLabel))
+                .addGap(18, 18, 18)
+                .addComponent(identitasLabel)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(pegawaiBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bayarBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(siswaBTN, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                    .addComponent(logoutBTN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(169, 169, 169)
-                .addComponent(namaLabel)
-                .addContainerGap(194, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(122, 122, 122)
-                .addComponent(namaLabel)
-                .addContainerGap(162, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void pegawaiBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pegawaiBTNActionPerformed
+        // TODO add your handling code here:
+        JFramePegawai peg = new JFramePegawai();
+        peg.setVisible(true);
+    }//GEN-LAST:event_pegawaiBTNActionPerformed
+
+    private void logoutBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBTNActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_logoutBTNActionPerformed
+
+    private void siswaBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siswaBTNActionPerformed
+        // TODO add your handling code here:
+        JFrameSiswa sis = new JFrameSiswa();
+        sis.setVisible(true);
+    }//GEN-LAST:event_siswaBTNActionPerformed
+
+    private void bayarBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bayarBTNActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bayarBTNActionPerformed
 
     /**
      * @param args the command line arguments
@@ -91,6 +226,13 @@ String nama = Session.getNama();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel namaLabel;
+    private javax.swing.JButton bayarBTN;
+    private javax.swing.JLabel identitasLabel;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JButton logoutBTN;
+    private javax.swing.JButton pegawaiBTN;
+    private javax.swing.JButton siswaBTN;
+    private javax.swing.JLabel tglLabel;
     // End of variables declaration//GEN-END:variables
 }
