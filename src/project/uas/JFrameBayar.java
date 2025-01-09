@@ -4,6 +4,7 @@
  */
 package project.uas;
 
+import java.awt.Component;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,6 +15,13 @@ import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import net.proteanit.sql.DbUtils;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import javax.swing.AbstractCellEditor;
+import javax.swing.JFormattedTextField;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellEditor;
 
 /**
  *
@@ -21,12 +29,12 @@ import net.proteanit.sql.DbUtils;
  */
 public class JFrameBayar extends javax.swing.JFrame {
 
-    
     Connection con = null;
-	ResultSet rs = null;
-	PreparedStatement pst = null;
-	Statement statBrg;
-	Boolean ada = false;
+    ResultSet rs = null;
+    PreparedStatement pst = null;
+    Statement statBrg;
+    Boolean ada = false;
+
     /**
      * Creates new form JFramePegawai
      */
@@ -34,26 +42,28 @@ public class JFrameBayar extends javax.swing.JFrame {
         initComponents();
         Timer timer = new Timer(1000, e -> updateDateTime());
         timer.start();
-         koneksi();   //memanggil fungsi koneksi
+        koneksi();   //memanggil fungsi koneksi
         display(); // menggil fungsi dislay untuk menampilkan data ke table
+        getData();
+        idbayarTF.setVisible(false);
         setLocationRelativeTo(null);
-        
+
     }
-    
+
     private void updateDateTime() {
         // Format tanggal dan waktu
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         String currentTime = formatter.format(new Date());
         tglLabel.setText(currentTime);
     }
-    
+
     private void getData() {
         try {
             // Membuat koneksi ke database
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url="jdbc:mysql://localhost/tu_sekolah"; //url database
-            String user="root"; //user database
-            String pass=""; //password database
+            String url = "jdbc:mysql://localhost/tu_sekolah"; //url database
+            String user = "root"; //user database
+            String pass = ""; //password database
             Connection conn = DriverManager.getConnection(url, user, pass);
             Statement stmt = conn.createStatement();
             String query = "SELECT nis,nama FROM tbl_siswa order by nis asc";  // Query untuk mengambil nama produk
@@ -61,7 +71,7 @@ public class JFrameBayar extends javax.swing.JFrame {
 
             // Menambahkan data dari ResultSet ke JComboBox
             while (rs.next()) {
-                String namaProduk = rs.getString("nis") + " - " + rs.getString("nama") ;  // Ambil nama produk
+                String namaProduk = rs.getString("nis") + " - " + rs.getString("nama");  // Ambil nama produk
                 jComboBox1.addItem(namaProduk);  // Menambahkan item ke comboBox
             }
 
@@ -73,43 +83,58 @@ public class JFrameBayar extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-    
+
     private void koneksi() {
-	try{
+        try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url="jdbc:mysql://localhost/tu_sekolah"; //url database
-            String user="root"; //user database
-            String pass=""; //password database
-            con = DriverManager.getConnection(url,user,pass);
-            statBrg = con.createStatement(rs.TYPE_SCROLL_SENSITIVE,rs.CONCUR_UPDATABLE);
-            rs = statBrg.executeQuery("select a.nis, b.nama, a.bulan, a.nilai,a.keterangan\n" +
-                                    "from tbl_bayaran a \n" +
-                                    "join tbl_siswa b on a.nis = b.nis\n" +
-                                    "order by a.bulan desc");
-            
-            }catch(Exception e){
-                JOptionPane.showMessageDialog(null, e);
-                System.exit(0);
-            }
+            String url = "jdbc:mysql://localhost/tu_sekolah"; //url database
+            String user = "root"; //user database
+            String pass = ""; //password database
+            con = DriverManager.getConnection(url, user, pass);
+            statBrg = con.createStatement(rs.TYPE_SCROLL_SENSITIVE, rs.CONCUR_UPDATABLE);
+            rs = statBrg.executeQuery("select a.idbayar,a.nis, b.nama, a.bulan, a.nilai,a.keterangan\n"
+                    + "from tbl_bayaran a \n"
+                    + "join tbl_siswa b on a.nis = b.nis\n"
+                    + "order by a.bulan desc");
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+            System.exit(0);
+        }
     }
-    
-    private void display(){
-        try{
-            String sql="select a.nis, b.nama, a.bulan, a.nilai,a.keterangan\n" +
-                        "from tbl_bayaran a \n" +
-                        "join tbl_siswa b on a.nis = b.nis\n" +
-                        "order by a.bulan desc";
+
+    private void display() {
+        try {
+            String sql = "select a.idbayar, a.nis, b.nama, DATE_FORMAT(a.bulan, '%d/%m/%Y %H:%i:%s') as tanggal, a.nilai,a.keterangan\n"
+                    + "from tbl_bayaran a \n"
+                    + "join tbl_siswa b on a.nis = b.nis\n"
+                    + "order by a.bulan desc";
             pst = con.prepareStatement(sql);
             rs = pst.executeQuery();
             jTable1.setModel(DbUtils.resultSetToTableModel(rs));
-        }catch(Exception e){
+
+            // Menyembunyikan kolom dengan indeks tertentu
+            jTable1.getColumnModel().getColumn(0).setMaxWidth(0); // Kolom pertama disembunyikan
+            jTable1.getColumnModel().getColumn(0).setMinWidth(0); // Mengatur lebar kolom ke 0
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(0); // Mengatur lebar preferensi kolom ke 0
+            jTable1.getColumnModel().getColumn(0).setWidth(0); // Lebar kolom ke 0
+            jTable1.getColumnModel().getColumn(0).setResizable(false); // Menonaktifkan kemampuan resizing kolom
+            
+            
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
- }
-    
-    private void clear() {
-        namaTF.setText(null);
     }
+    private void clear() {
+        idbayarTF.setText(null);
+        namaTF.setText(null);
+        alamatTF.setText(null);
+        jComboBox1.removeAllItems();
+        jComboBox1.addItem("Pilih Siswa");
+        jComboBox1.setSelectedItem("Pilih Siswa");
+        getData();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -135,13 +160,14 @@ public class JFrameBayar extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
-        jTextField1 = new javax.swing.JTextField();
+        alamatTF = new javax.swing.JTextField();
+        idbayarTF = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Bayar Page");
         setResizable(false);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jLabel1.setText("BAYAR SPP");
@@ -174,6 +200,12 @@ public class JFrameBayar extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jLabel3.setText("JUMLAH BAYAR");
+
+        namaTF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                namaTFKeyTyped(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jLabel5.setText("KETERANGAN");
@@ -215,6 +247,8 @@ public class JFrameBayar extends javax.swing.JFrame {
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pilih Siswa" }));
 
+        idbayarTF.setEnabled(false);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -223,11 +257,14 @@ public class JFrameBayar extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(namaTF)
-                    .addComponent(jComboBox1, 0, 420, Short.MAX_VALUE)
+                    .addComponent(namaTF, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField1)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(alamatTF)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(idbayarTF, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(30, 30, 30)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
@@ -248,7 +285,8 @@ public class JFrameBayar extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton4)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(idbayarTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -266,7 +304,7 @@ public class JFrameBayar extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(alamatTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -323,96 +361,102 @@ public class JFrameBayar extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             clear();
-            nipTF.setEnabled(false);
             koneksi();
             int row =jTable1.getSelectedRow();
             String tabel_klik=(jTable1.getModel().getValueAt(row, 0).toString());
             java.sql.Statement stm = con.createStatement();
-            java.sql.ResultSet sql = stm.executeQuery("select nis,nama,jenis_kelamin,alamat from tbl_siswa where nis='"+tabel_klik+"'");
+            java.sql.ResultSet sql = stm.executeQuery("select a.idbayar,a.nis, b.nama, a.bulan, a.nilai,a.keterangan\n"
+                    + "from tbl_bayaran a \n"
+                    + "join tbl_siswa b on a.nis = b.nis\n"
+                    + "where idbayar = "+tabel_klik+"");
             if(sql.next()){
-                String id = sql.getString("nis");
-                nipTF.setText(id);
-                String nama = sql.getString("nama");
+                String id = sql.getString("nis") + " - " + sql.getString("nama");
+                jComboBox1.setSelectedItem(id);
+                
+                String nama = sql.getString("nilai");
                 namaTF.setText(nama);
-                if(sql.getString("jenis_kelamin").equals("L")) {
-                    jkRB1.setSelected(true);
-                } else {
-                    jkRB2.setSelected(true);
-                }
-                String harga = sql.getString("alamat");
+        
+                String harga = sql.getString("keterangan");
                 alamatTF.setText(harga);
+                
+                String idbayar = sql.getString("idbayar");
+                idbayarTF.setText(idbayar);
             }
         } catch (Exception e) {}
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        if(nipTF.getText().equals("") || namaTF.getText().equals("") || alamatTF.getText().equals("") || (!jkRB1.isSelected() && !jkRB2.isSelected())) {
-            JOptionPane.showMessageDialog(null,"Kolom Harus di pilih / di isi");
-        } else if((jkRB1.isSelected() && jkRB2.isSelected())) {
-            JOptionPane.showMessageDialog(null,"Jenis Kelamin Hanya Bisa Di Pilih Satu");
+        if (jComboBox1.getSelectedItem().toString().equals("") || jComboBox1.getSelectedItem().toString().equals("Pilih Siswa") || namaTF.getText().equals("") || namaTF.getText().equals("0") || alamatTF.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Kolom Harus di pilih / di isi");
         } else {
             // TODO add your handling code here:
-            try{
+            try {
                 koneksi();
-                String jk = "";
-                if(jkRB1.isSelected()) {
-                    jk = "L";
-                }else {
-                    jk = "P";
-                }
+                String nis = "";
+                String value = jComboBox1.getSelectedItem().toString();
+
+                String[] parts = value.split(" - ");
+                nis = parts[0];
+                LocalDateTime now = LocalDateTime.now();
+
+                // Format waktu dalam bentuk yang bisa dibaca (optional)
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                String formattedDate = now.format(formatter);
                 statBrg = con.createStatement();
-                String SQL = "insert into tbl_siswa values('"+nipTF.getText()+"','"+namaTF.getText()+"','"+jk+"','"+alamatTF.getText()+"')";
+                String SQL = "insert into tbl_bayaran (nis,bulan,nilai,keterangan)values('" + nis + "','" + formattedDate + "'," + namaTF.getText() + ",'" + alamatTF.getText() + "')";
                 statBrg.executeUpdate(SQL);
                 display();
                 statBrg.close();
                 con.close();
                 clear();
-                JOptionPane.showMessageDialog(null, "Berhasil menambah data siswa");
+                JOptionPane.showMessageDialog(null, "Berhasil menambah pembayaran");
 
-            }catch(Exception exc){
+            } catch (Exception exc) {
                 System.err.println(exc.getMessage());
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        if(nipTF.getText().equals("") || namaTF.getText().equals("") || alamatTF.getText().equals("") || (!jkRB1.isSelected() && !jkRB2.isSelected())) {
-            JOptionPane.showMessageDialog(null,"Kolom Harus di pilih / di isi");
-        } else if((jkRB1.isSelected() && jkRB2.isSelected())) {
-            JOptionPane.showMessageDialog(null,"Jenis Kelamin Hanya Bisa Di Pilih Satu");
+//        // TODO add your handling code here:
+        if (jComboBox1.getSelectedItem().toString().equals("") || jComboBox1.getSelectedItem().toString().equals("Pilih Siswa") || namaTF.getText().equals("") || namaTF.getText().equals("0") || alamatTF.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Kolom Harus di pilih / di isi");
         } else {
-            try{
+            try {
                 koneksi();
                 statBrg = con.createStatement();
-                String jk = "";
-                if(jkRB1.isSelected()) {
-                    jk = "L";
-                }else {
-                    jk = "P";
-                }
-                String SQL = "update tbl_siswa SET nama = '"+namaTF.getText()+"', alamat = '"+alamatTF.getText()+"', jenis_kelamin = '"+jk+"' WHERE nis = '"+nipTF.getText()+"'";
+                String idbayar = idbayarTF.getText();
+                String nis = "";
+                String value = jComboBox1.getSelectedItem().toString();
+
+                String[] parts = value.split(" - ");
+                nis = parts[0];
+
+                String SQL = "update tbl_bayaran SET nis = '" + nis + "', nilai = '" + namaTF.getText() + "', keterangan = '" + alamatTF.getText() + "' WHERE idbayar = "+idbayar+"";
                 statBrg.executeUpdate(SQL);
                 display();
                 statBrg.close();
                 con.close();
                 clear();
-                JOptionPane.showMessageDialog(null, "Data Siswa Berhasil di Update");
+                JOptionPane.showMessageDialog(null, "Data Pembayaran Berhasil di Update");
 
-            }catch(Exception exc){
+            } catch (Exception exc) {
                 System.err.println(exc.getMessage());
             }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-        // TODO add your handling code here:
-        try{
+//        // TODO add your handling code here:
+//        // TODO add your handling code here:
+        if(idbayarTF.equals("")) {
+            JOptionPane.showMessageDialog(null, "Gagal Hapus Pembayaran, Pilih Pembayarannya terlebih dahulu");
+        } else {
+            try{
             koneksi();
             statBrg = con.createStatement();
-            String SQL = "DELETE FROM tbl_siswa WHERE nis = '"+nipTF.getText()+"'";
+            String SQL = "DELETE FROM tbl_bayaran WHERE idbayar = "+idbayarTF.getText()+" ";
             statBrg.executeUpdate(SQL);
             display();
             statBrg.close();
@@ -423,6 +467,8 @@ public class JFrameBayar extends javax.swing.JFrame {
         }catch(Exception exc){
             System.err.println(exc.getMessage());
         }
+        }
+        
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -434,6 +480,19 @@ public class JFrameBayar extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void namaTFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_namaTFKeyTyped
+        // TODO add your handling code here:
+        namaTF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                char c = evt.getKeyChar();
+                // Hanya mengizinkan angka
+                if (!Character.isDigit(c)) {
+                    evt.consume(); // Mengabaikan input jika bukan angka
+                }
+            }
+        });
+    }//GEN-LAST:event_namaTFKeyTyped
 
     /**
      * @param args the command line arguments
@@ -471,6 +530,8 @@ public class JFrameBayar extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField alamatTF;
+    private javax.swing.JTextField idbayarTF;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -485,7 +546,6 @@ public class JFrameBayar extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField namaTF;
     private javax.swing.JLabel tglLabel;
     // End of variables declaration//GEN-END:variables

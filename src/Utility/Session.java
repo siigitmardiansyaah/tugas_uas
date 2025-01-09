@@ -55,5 +55,13 @@ public class Session {
         Session.password = password;
     }
     
+    public static void resetSession() {
+        nip = null;
+        nama = null;
+        alamat = null;
+        jenis_kelamin = null;
+        password = null;
+    }
+    
     
 }

@@ -404,7 +404,10 @@ public class JFrameSiswa extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         // TODO add your handling code here:
-        try{
+        if(nipTF.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Tidak Bisa Menghapus Siswa, Pilih Terlebih Dahulu Siswa yang ingin dihapus datanya");
+        } else {
+            try{
             koneksi();
             statBrg = con.createStatement();
             String SQL = "DELETE FROM tbl_siswa WHERE nis = '"+nipTF.getText()+"'";
@@ -417,6 +420,7 @@ public class JFrameSiswa extends javax.swing.JFrame {
 
         }catch(Exception exc){
             System.err.println(exc.getMessage());
+        }
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 

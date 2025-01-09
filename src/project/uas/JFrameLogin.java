@@ -53,7 +53,7 @@ public class JFrameLogin extends javax.swing.JFrame {
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setResizable(false);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.setAutoscrolls(true);
 
         loginLabel.setFont(new java.awt.Font("Engravers MT", 1, 24)); // NOI18N
@@ -72,7 +72,6 @@ public class JFrameLogin extends javax.swing.JFrame {
         passLabel.setText("PASSWORD");
 
         loginButton.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
-        loginButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/login.png"))); // NOI18N
         loginButton.setText("Login");
         loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

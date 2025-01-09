@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package project.uas;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.text.SimpleDateFormat;
@@ -16,17 +17,20 @@ import javax.xml.crypto.Data;
 import net.proteanit.sql.DbUtils;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Lenovo
  */
 public class JFramePegawai extends javax.swing.JFrame {
 // Script variable statment
+
     Connection con = null;
-	ResultSet rs = null;
-	PreparedStatement pst = null;
-	Statement statBrg;
-	Boolean ada = false;
+    ResultSet rs = null;
+    PreparedStatement pst = null;
+    Statement statBrg;
+    Boolean ada = false;
+
     /**
      * Creates new form JFramePegawai
      */
@@ -34,45 +38,45 @@ public class JFramePegawai extends javax.swing.JFrame {
         initComponents();
         Timer timer = new Timer(1000, e -> updateDateTime());
         timer.start();
-         koneksi();   //memanggil fungsi koneksi
+        koneksi();   //memanggil fungsi koneksi
         display(); // menggil fungsi dislay untuk menampilkan data ke table
         setLocationRelativeTo(null);
     }
-    
+
     private void updateDateTime() {
         // Format tanggal dan waktu
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         String currentTime = formatter.format(new Date());
         tglLabel.setText(currentTime);
     }
-    
+
     private void koneksi() {
-	try{
+        try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url="jdbc:mysql://localhost/tu_sekolah"; //url database
-            String user="root"; //user database
-            String pass=""; //password database
-            con = DriverManager.getConnection(url,user,pass);
-            statBrg = con.createStatement(rs.TYPE_SCROLL_SENSITIVE,rs.CONCUR_UPDATABLE);
+            String url = "jdbc:mysql://localhost/tu_sekolah"; //url database
+            String user = "root"; //user database
+            String pass = ""; //password database
+            con = DriverManager.getConnection(url, user, pass);
+            statBrg = con.createStatement(rs.TYPE_SCROLL_SENSITIVE, rs.CONCUR_UPDATABLE);
             rs = statBrg.executeQuery("select nip,nama,case when jenis_kelamin = 'L' then 'Laki - Laki' else 'Perempuan' end as jenis_kelamin,alamat from tbl_pegawai order by nip");
-            
-            }catch(Exception e){
-                JOptionPane.showMessageDialog(null, e);
-                System.exit(0);
-            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+            System.exit(0);
+        }
     }
-    
-    private void display(){
-        try{
-            String sql="select nip,nama,case when jenis_kelamin = 'L' then 'Laki - Laki' else 'Perempuan' end as jenis_kelamin,alamat from tbl_pegawai order by nip";
+
+    private void display() {
+        try {
+            String sql = "select nip,nama,case when jenis_kelamin = 'L' then 'Laki - Laki' else 'Perempuan' end as jenis_kelamin,alamat from tbl_pegawai order by nip";
             pst = con.prepareStatement(sql);
             rs = pst.executeQuery();
             jTable1.setModel(DbUtils.resultSetToTableModel(rs));
-        }catch(Exception e){
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
- }
-    
+    }
+
     private void clear() {
         nipTF.setText(null);
         namaTF.setText(null);
@@ -324,67 +328,67 @@ public class JFramePegawai extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-       clear();
+        clear();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        if(nipTF.getText().equals("") || namaTF.getText().equals("") || alamatTF.getText().equals("") || (!jkRB1.isSelected() && !jkRB2.isSelected())) {
-            JOptionPane.showMessageDialog(null,"Kolom Harus di pilih / di isi");
-        } else if((jkRB1.isSelected() && jkRB2.isSelected())) {
-            JOptionPane.showMessageDialog(null,"Jenis Kelamin Hanya Bisa Di Pilih Satu");
+        if (nipTF.getText().equals("") || namaTF.getText().equals("") || alamatTF.getText().equals("") || (!jkRB1.isSelected() && !jkRB2.isSelected())) {
+            JOptionPane.showMessageDialog(null, "Kolom Harus di pilih / di isi");
+        } else if ((jkRB1.isSelected() && jkRB2.isSelected())) {
+            JOptionPane.showMessageDialog(null, "Jenis Kelamin Hanya Bisa Di Pilih Satu");
         } else {
             // TODO add your handling code here:
-        try{
-            koneksi();
-            String jk = "";
-            if(jkRB1.isSelected()) {
-                jk = "L";
-            }else {
-                jk = "P";
+            try {
+                koneksi();
+                String jk = "";
+                if (jkRB1.isSelected()) {
+                    jk = "L";
+                } else {
+                    jk = "P";
+                }
+                statBrg = con.createStatement();
+                String SQL = "insert into tbl_pegawai values('" + nipTF.getText() + "','" + namaTF.getText() + "','" + jk + "','" + alamatTF.getText() + "','" + nipTF.getText() + "')";
+                statBrg.executeUpdate(SQL);
+                display();
+                statBrg.close();
+                con.close();
+                clear();
+                JOptionPane.showMessageDialog(null, "Berhasil menambah data pegawai");
+
+            } catch (Exception exc) {
+                System.err.println(exc.getMessage());
             }
-            statBrg = con.createStatement();
-            String SQL = "insert into tbl_pegawai values('"+nipTF.getText()+"','"+namaTF.getText()+"','"+jk+"','"+alamatTF.getText()+"','"+nipTF.getText()+"')";
-            statBrg.executeUpdate(SQL);
-            display();
-            statBrg.close();
-            con.close();
-            clear();
-            JOptionPane.showMessageDialog(null, "Berhasil menambah data pegawai");
-            
-        }catch(Exception exc){
-            System.err.println(exc.getMessage());
-        }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        if(nipTF.getText().equals("") || namaTF.getText().equals("") || alamatTF.getText().equals("") || (!jkRB1.isSelected() && !jkRB2.isSelected())) {
-            JOptionPane.showMessageDialog(null,"Kolom Harus di pilih / di isi");
-        } else if((jkRB1.isSelected() && jkRB2.isSelected())) {
-            JOptionPane.showMessageDialog(null,"Jenis Kelamin Hanya Bisa Di Pilih Satu");
+        if (nipTF.getText().equals("") || namaTF.getText().equals("") || alamatTF.getText().equals("") || (!jkRB1.isSelected() && !jkRB2.isSelected())) {
+            JOptionPane.showMessageDialog(null, "Kolom Harus di pilih / di isi");
+        } else if ((jkRB1.isSelected() && jkRB2.isSelected())) {
+            JOptionPane.showMessageDialog(null, "Jenis Kelamin Hanya Bisa Di Pilih Satu");
         } else {
-            try{
-            koneksi();
-            statBrg = con.createStatement();
-            String jk = "";
-            if(jkRB1.isSelected()) {
-                jk = "L";
-            }else {
-                jk = "P";
+            try {
+                koneksi();
+                statBrg = con.createStatement();
+                String jk = "";
+                if (jkRB1.isSelected()) {
+                    jk = "L";
+                } else {
+                    jk = "P";
+                }
+                String SQL = "update tbl_pegawai SET nama = '" + namaTF.getText() + "', alamat = '" + alamatTF.getText() + "', jenis_kelamin = '" + jk + "' WHERE nip = '" + nipTF.getText() + "'";
+                statBrg.executeUpdate(SQL);
+                display();
+                statBrg.close();
+                con.close();
+                clear();
+                JOptionPane.showMessageDialog(null, "Data Pegawai Berhasil di Update");
+
+            } catch (Exception exc) {
+                System.err.println(exc.getMessage());
             }
-            String SQL = "update tbl_pegawai SET nama = '"+namaTF.getText()+"', alamat = '"+alamatTF.getText()+"', jenis_kelamin = '"+jk+"' WHERE nip = '"+nipTF.getText()+"'";
-            statBrg.executeUpdate(SQL);
-            display();
-            statBrg.close();
-            con.close();
-            clear();
-            JOptionPane.showMessageDialog(null, "Data Pegawai Berhasil di Update");
-           
-        }catch(Exception exc){
-            System.err.println(exc.getMessage());
-        }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -394,16 +398,16 @@ public class JFramePegawai extends javax.swing.JFrame {
             clear();
             nipTF.setEnabled(false);
             koneksi();
-            int row =jTable1.getSelectedRow();
-            String tabel_klik=(jTable1.getModel().getValueAt(row, 0).toString());
+            int row = jTable1.getSelectedRow();
+            String tabel_klik = (jTable1.getModel().getValueAt(row, 0).toString());
             java.sql.Statement stm = con.createStatement();
-            java.sql.ResultSet sql = stm.executeQuery("select nip,nama,jenis_kelamin,alamat from tbl_pegawai where nip='"+tabel_klik+"'");
-            if(sql.next()){
+            java.sql.ResultSet sql = stm.executeQuery("select nip,nama,jenis_kelamin,alamat from tbl_pegawai where nip='" + tabel_klik + "'");
+            if (sql.next()) {
                 String id = sql.getString("nip");
                 nipTF.setText(id);
                 String nama = sql.getString("nama");
                 namaTF.setText(nama);
-                if(sql.getString("jenis_kelamin").equals("L")) {
+                if (sql.getString("jenis_kelamin").equals("L")) {
                     jkRB1.setSelected(true);
                 } else {
                     jkRB2.setSelected(true);
@@ -411,26 +415,32 @@ public class JFramePegawai extends javax.swing.JFrame {
                 String harga = sql.getString("alamat");
                 alamatTF.setText(harga);
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         // TODO add your handling code here:
-        try{
-            koneksi();
-            statBrg = con.createStatement();
-            String SQL = "DELETE FROM tbl_pegawai WHERE nip = '"+nipTF.getText()+"'";
-            statBrg.executeUpdate(SQL);
-            display();
-            statBrg.close();
-            con.close();
-            JOptionPane.showMessageDialog(null, "Berhasil Hapus Data Pegawai");
-            clear();
-           
-        }catch(Exception exc){
-            System.err.println(exc.getMessage());
+        if (nipTF.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Tidak Bisa Hapus Data Pegawai, Pilih Pegawainya Terlebih Dahulu");
+        } else {
+            try {
+                koneksi();
+                statBrg = con.createStatement();
+                String SQL = "DELETE FROM tbl_pegawai WHERE nip = '" + nipTF.getText() + "'";
+                statBrg.executeUpdate(SQL);
+                display();
+                statBrg.close();
+                con.close();
+                JOptionPane.showMessageDialog(null, "Berhasil Hapus Data Pegawai");
+                clear();
+
+            } catch (Exception exc) {
+                System.err.println(exc.getMessage());
+            }
         }
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**

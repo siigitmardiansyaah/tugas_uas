@@ -62,7 +62,7 @@ public class JFrameHome extends javax.swing.JFrame {
         setTitle("Home Page");
         setResizable(false);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel1.setText("SELAMAT DATANG, ");
@@ -74,7 +74,7 @@ public class JFrameHome extends javax.swing.JFrame {
         tglLabel.setText("Tanggal");
 
         pegawaiBTN.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-        pegawaiBTN.setText("PEGAWAI");
+        pegawaiBTN.setText("DATA PEGAWAI");
         pegawaiBTN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pegawaiBTNActionPerformed(evt);
@@ -90,7 +90,7 @@ public class JFrameHome extends javax.swing.JFrame {
         });
 
         siswaBTN.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-        siswaBTN.setText("SISWA");
+        siswaBTN.setText("DATA SISWA");
         siswaBTN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 siswaBTNActionPerformed(evt);
@@ -114,21 +114,19 @@ public class JFrameHome extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(identitasLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(pegawaiBTN)
+                        .addGap(18, 18, 18)
+                        .addComponent(siswaBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(bayarBTN)
+                        .addGap(18, 18, 18)
+                        .addComponent(logoutBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(89, 89, 89)
-                        .addComponent(tglLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(tglLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(pegawaiBTN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(siswaBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(89, 89, 89)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(bayarBTN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(logoutBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(66, 66, 66))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -139,24 +137,22 @@ public class JFrameHome extends javax.swing.JFrame {
                     .addComponent(tglLabel))
                 .addGap(18, 18, 18)
                 .addComponent(identitasLabel)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(pegawaiBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bayarBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(siswaBTN, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
-                    .addComponent(logoutBTN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(pegawaiBTN)
+                    .addComponent(siswaBTN)
+                    .addComponent(logoutBTN)
+                    .addComponent(bayarBTN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -170,15 +166,11 @@ public class JFrameHome extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void pegawaiBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pegawaiBTNActionPerformed
+    private void bayarBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bayarBTNActionPerformed
         // TODO add your handling code here:
-        JFramePegawai peg = new JFramePegawai();
-        peg.setVisible(true);
-    }//GEN-LAST:event_pegawaiBTNActionPerformed
-
-    private void logoutBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBTNActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_logoutBTNActionPerformed
+        JFrameBayar bf = new JFrameBayar();
+        bf.setVisible(true);
+    }//GEN-LAST:event_bayarBTNActionPerformed
 
     private void siswaBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siswaBTNActionPerformed
         // TODO add your handling code here:
@@ -186,9 +178,21 @@ public class JFrameHome extends javax.swing.JFrame {
         sis.setVisible(true);
     }//GEN-LAST:event_siswaBTNActionPerformed
 
-    private void bayarBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bayarBTNActionPerformed
+    private void logoutBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBTNActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_bayarBTNActionPerformed
+        Session sess = new Session();
+        sess.resetSession();
+        
+        JFrameLogin JFL = new JFrameLogin();
+        JFL.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_logoutBTNActionPerformed
+
+    private void pegawaiBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pegawaiBTNActionPerformed
+        // TODO add your handling code here:
+        JFramePegawai peg = new JFramePegawai();
+        peg.setVisible(true);
+    }//GEN-LAST:event_pegawaiBTNActionPerformed
 
     /**
      * @param args the command line arguments
