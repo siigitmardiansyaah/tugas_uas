@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 08, 2025 at 09:58 AM
+-- Generation Time: Jan 09, 2025 at 07:04 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -28,11 +28,19 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `tbl_bayaran` (
+  `idbayar` int(11) NOT NULL,
   `nis` varchar(10) NOT NULL,
   `bulan` datetime NOT NULL,
   `nilai` int(11) NOT NULL,
   `keterangan` varchar(40) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_bayaran`
+--
+
+INSERT INTO `tbl_bayaran` (`idbayar`, `nis`, `bulan`, `nilai`, `keterangan`) VALUES
+(4, '0003', '2025-01-09 10:48:21', 3000001, 'test');
 
 -- --------------------------------------------------------
 
@@ -53,7 +61,7 @@ CREATE TABLE `tbl_pegawai` (
 --
 
 INSERT INTO `tbl_pegawai` (`nip`, `nama`, `jenis_kelamin`, `alamat`, `password`) VALUES
-('test', 'SIGIT', 'L', 'test', 'test');
+('test', 'test', 'L', 'test', 'test');
 
 -- --------------------------------------------------------
 
@@ -69,14 +77,39 @@ CREATE TABLE `tbl_siswa` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `tbl_siswa`
+--
+
+INSERT INTO `tbl_siswa` (`nis`, `nama`, `jenis_kelamin`, `alamat`) VALUES
+('0001', 'TEST', 'L', 'TEST'),
+('0002', 'TUTIS', 'P', 'TEST'),
+('0004', 'test', 'L', '12333');
+
+--
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `tbl_bayaran`
+--
+ALTER TABLE `tbl_bayaran`
+  ADD PRIMARY KEY (`idbayar`);
 
 --
 -- Indexes for table `tbl_pegawai`
 --
 ALTER TABLE `tbl_pegawai`
   ADD PRIMARY KEY (`nip`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_bayaran`
+--
+ALTER TABLE `tbl_bayaran`
+  MODIFY `idbayar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
